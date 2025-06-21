@@ -9,18 +9,20 @@ ARG USE_GPU=false
 
 WORKDIR /app
 
-# Install dependencies based on base image
+# Install system dependencies and Python packages in one layer
 RUN if [ -f /etc/debian_version ]; then \
-        apt-get update && \
-        apt-get install ca-certificates && \
-        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        ffmpeg \
-        build-essential \
-        gosu \
-        python3-pip \
-        python3 \
-        && apt-get clean && \
-        rm -rf /var/lib/apt/lists/* ; \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    ffmpeg \
+    build-essential \
+    gosu \
+    python3-pip \
+    python3 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/* ; \
     fi
 
 # Set up Python environment
@@ -28,14 +30,23 @@ COPY Pipfile Pipfile.lock ./
 
 # Install pipenv and dependencies
 RUN pip3 install --no-cache-dir pipenv && \
-    pipenv install --deploy --system --dev
+    pipenv install --deploy --system --dev && \
+    pip3 cache purge && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/*
 
 # Install PyTorch with CUDA support if using NVIDIA image
 RUN if [ "${USE_GPU}" = "true" ]; then \
-        pip install nvidia-cudnn-cu12; \
-        pip install torch; \
+    pip install --no-cache-dir nvidia-cudnn-cu12 && \
+    pip install --no-cache-dir torch && \
+    pip3 cache purge && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/* ; \
     else \
-        pip install torch --index-url https://download.pytorch.org/whl/cpu; \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip3 cache purge && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/* ; \
     fi
 
 # Create non-root user for running the application

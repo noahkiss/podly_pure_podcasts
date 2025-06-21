@@ -18,8 +18,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo apt-get clean
+          sudo rm -rf /var/lib/apt/lists/*
+          df -h
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:v0.12.0
+            network=host
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -42,6 +57,28 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha,prefix={{branch}}-
 
+      - name: Build and push Frontend image
+        uses: docker/build-push-action@v6
+        id: build-and-push-frontend
+        with:
+          context: .
+          file: ./Dockerfile.frontend
+          push: true
+          platforms: linux/amd64
+          build-args: |
+            VITE_API_URL=http://localhost:5002
+          tags: |
+            ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:latest
+            ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Clean Docker cache before backend build
+        run: |
+          docker system prune -f
+          docker builder prune -f
+          df -h
+
       - name: Build and push Backend image (GPU)
         uses: docker/build-push-action@v6
         id: build-and-push-backend
@@ -59,24 +96,15 @@ jobs:
             ghcr.io/noahkiss/podly_pure_podcasts/podly-backend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Build and push Frontend image
-        uses: docker/build-push-action@v6
-        id: build-and-push-frontend
-        with:
-          context: .
-          file: ./Dockerfile.frontend
-          push: true
-          platforms: linux/amd64
-          build-args: |
-            VITE_API_URL=http://localhost:5002
-          tags: |
-            ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:latest
-            ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          outputs: type=docker,dest=/tmp/backend.tar
 
       - name: Image Digest
         run: |
           echo "Pushed backend image digest: ${{ steps.build-and-push-backend.outputs.digest }}"
           echo "Pushed frontend image digest: ${{ steps.build-and-push-frontend.outputs.digest }}"
+
+      - name: Final cleanup
+        run: |
+          docker system prune -f
+          docker builder prune -f
+          df -h
