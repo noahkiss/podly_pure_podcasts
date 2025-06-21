@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Podly Frontend</Name>
+  <Repository>ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:latest</Repository>
+  <Registry>https://ghcr.io/</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/noahkiss/podly_pure_podcasts</Support>
+  <Project>https://github.com/noahkiss/podly_pure_podcasts</Project>
+  <Overview>Podly Frontend - Web interface for the Podly podcast ad-blocker.</Overview>
+  <Category>MediaApp:</Category>
+  <WebUI>http://[IP]:[PORT:80]/</WebUI>
+  <TemplateURL>false</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/noahkiss/podly_pure_podcasts/main/fork/unraid/podly-icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1703123456</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Config Name="Frontend Port" Target="80" Default="7637" Mode="tcp" Description="Frontend web interface port" Type="Port" Display="always" Required="false" Mask="false"/>
+  <Config Name="Backend API URL" Target="VITE_API_URL" Default="http://localhost:7638" Mode="" Description="Backend API URL (change if backend port is different)" Type="Variable" Display="always" Required="false" Mask="false"/>
+</Container>

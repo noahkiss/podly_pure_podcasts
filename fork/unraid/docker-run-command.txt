@@ -1,0 +1,25 @@
+# Podly Backend Container
+docker run -d \
+  --name=podly_backend \
+  --runtime=nvidia \
+  --gpus all \
+  -e PUID=99 \
+  -e PGID=100 \
+  -e CUDA_VISIBLE_DEVICES=0 \
+  -e CORS_ORIGINS=* \
+  -p 7638:5002 \
+  -v /mnt/user/appdata/podly/config:/app/config \
+  -v /mnt/user/appdata/podly/in:/app/in \
+  -v /mnt/user/appdata/podly/srv:/app/srv \
+  -v /mnt/user/appdata/podly/src:/app/src \
+  -v /mnt/user/appdata/podly/scripts:/app/scripts \
+  --restart unless-stopped \
+  ghcr.io/noahkiss/podly_pure_podcasts/podly-backend:latest
+
+# Podly Frontend Container
+docker run -d \
+  --name=podly_frontend \
+  -e VITE_API_URL=http://localhost:7638 \
+  -p 7637:80 \
+  --restart unless-stopped \
+  ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:latest

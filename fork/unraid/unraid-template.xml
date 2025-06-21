@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Podly Backend</Name>
+  <Repository>ghcr.io/noahkiss/podly_pure_podcasts/podly-backend:latest</Repository>
+  <Registry>https://ghcr.io/</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/noahkiss/podly_pure_podcasts</Support>
+  <Project>https://github.com/noahkiss/podly_pure_podcasts</Project>
+  <Overview>Podly Backend - Ad-block for podcasts using OpenAI's Whisper for transcription and GPT for ad segment identification.</Overview>
+  <Category>MediaApp:</Category>
+  <TemplateURL>false</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/noahkiss/podly_pure_podcasts/main/fork/unraid/podly-icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1703123456</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>nvidia-docker</Requires>
+  <Config Name="Config Directory" Target="/app/config" Default="/mnt/cache/appdata/podly/config" Mode="rw" Description="Configuration directory" Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Input Directory" Target="/app/in" Default="/mnt/cache/appdata/podly/in" Mode="rw" Description="Input files directory" Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Server Directory" Target="/app/srv" Default="/mnt/cache/appdata/podly/srv" Mode="rw" Description="Server files directory" Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Source Directory" Target="/app/src" Default="/mnt/cache/appdata/podly/src" Mode="rw" Description="Source code directory" Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Scripts Directory" Target="/app/scripts" Default="/mnt/cache/appdata/podly/scripts" Mode="rw" Description="Scripts directory" Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Backend Port" Target="5002" Default="7638" Mode="tcp" Description="Backend API port" Type="Port" Display="always" Required="false" Mask="false"/>
+  <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="User ID (nobody)" Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Group ID (nobody)" Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="CUDA_VISIBLE_DEVICES" Target="CUDA_VISIBLE_DEVICES" Default="0" Mode="" Description="CUDA GPU device to use" Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="CORS_ORIGINS" Target="CORS_ORIGINS" Default="*" Mode="" Description="CORS origins" Type="Variable" Display="always" Required="false" Mask="false"/>
+</Container>
