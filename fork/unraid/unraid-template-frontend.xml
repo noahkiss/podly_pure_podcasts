@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>Podly Frontend</Name>
+  <Name>podly-frontend</Name>
   <Repository>ghcr.io/noahkiss/podly_pure_podcasts/podly-frontend:latest</Repository>
   <Registry>https://ghcr.io/</Registry>
   <Network>bridge</Network>

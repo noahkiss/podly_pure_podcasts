@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>Podly Backend</Name>
+  <Name>podly-backend</Name>
   <Repository>ghcr.io/noahkiss/podly_pure_podcasts/podly-backend:latest</Repository>
   <Registry>https://ghcr.io/</Registry>
   <Network>bridge</Network>
@@ -13,13 +13,12 @@
   <Category>MediaApp:</Category>
   <TemplateURL>false</TemplateURL>
   <Icon>https://raw.githubusercontent.com/noahkiss/podly_pure_podcasts/main/fork/unraid/podly-icon.png</Icon>
-  <ExtraParams/>
+  <ExtraParams>--runtime=nvidia</ExtraParams>
   <PostArgs/>
   <CPUset/>
   <DateInstalled>1703123456</DateInstalled>
   <DonateText/>
   <DonateLink/>
-  <Requires>nvidia-docker</Requires>
   <Config Name="Config Directory" Target="/app/config" Default="/mnt/cache/appdata/podly/config" Mode="rw" Description="Configuration directory" Type="Path" Display="always" Required="false" Mask="false"/>
   <Config Name="Input Directory" Target="/app/in" Default="/mnt/cache/appdata/podly/in" Mode="rw" Description="Input files directory" Type="Path" Display="always" Required="false" Mask="false"/>
   <Config Name="Server Directory" Target="/app/srv" Default="/mnt/cache/appdata/podly/srv" Mode="rw" Description="Server files directory" Type="Path" Display="always" Required="false" Mask="false"/>
