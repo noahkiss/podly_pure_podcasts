@@ -55,9 +55,16 @@ RUN groupadd -r appuser && \
     mkdir -p /home/appuser && \
     chown -R appuser:appuser /home/appuser
 
+# Copy source code
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+
 # Copy entrypoint script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 755 /docker-entrypoint.sh
+
+# Change ownership of copied files to appuser
+RUN chown -R appuser:appuser /app
 
 EXPOSE 5002
 
